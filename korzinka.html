@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korzinka</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background-color: #FAFAFA;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-info h3 {
+            margin-bottom: 5px;
+            font-size: 18px;
+            color: #403937;
+        }
+        .cart-item-info p {
+            font-size: 14px;
+            color: #574F4D;
+        }
+        .counter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .counter button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 5px;
+            background-color: #E6E5E5;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .price {
+            font-weight: 700;
+            font-size: 18px;
+            color: #403937;
+            margin-left: 15px;
+        }
+        .total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 20px;
+            color: #272221;
+        }
+        .checkout {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 25px;
+            background-color: #4B2995;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .checkout:hover {
+            background-color: #341f72;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sizning Korzinkangiz</h1>
+    <div class="cart-container" id="cart-container">
+        <!-- Buy bosilgan itemlar shu yerda JS orqali paydo bo‘ladi -->
+    </div>
+    <div class="total" id="total">Jami: R$ 0.00</div>
+    <button class="checkout">Dastafka</button>
+
+    <script>
+        // ==================== DEMO DATA ====================
+        // Odatda localStorage orqali saqlansa bo‘ladi
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        const cartContainer = document.getElementById("cart-container");
+        const totalEl = document.getElementById("total");
+
+        // ==================== FUNCTION TO RENDER CART ====================
+        function renderCart() {
+            cartContainer.innerHTML = "";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const cartItem = document.createElement("div");
+                cartItem.classList.add("cart-item");
+
+                cartItem.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p>R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="counter">
+                        <button class="minus">-</button>
+                        <span class="count">${item.count}</span>
+                        <button class="plus">+</button>
+                    </div>
+                    <div class="price">R$ ${(item.price*item.count).toFixed(2)}</div>
+                `;
+
+                // Counter + / -
+                const minusBtn = cartItem.querySelector(".minus");
+                const plusBtn = cartItem.querySelector(".plus");
+                const countEl = cartItem.querySelector(".count");
+                const priceEl = cartItem.querySelector(".price");
+
+                minusBtn.addEventListener("click", () => {
+                    if(item.count > 1) {
+                        item.count--;
+                        countEl.textContent = item.count;
+                        priceEl.textContent = `R$ ${(item.price*item.count).toFixed(2)}`;
+                        updateTotal();
+                        saveCart();
+                    }
+                });
+
+                plusBtn.addEventListener("click", () => {
+                    item.count++;
+                    countEl.textContent = item.count;
+                    priceEl.textContent = `R$ ${(item.price*item.count).toFixed(2)}`;
+                    updateTotal();
+                    saveCart();
+                });
+
+                cartContainer.appendChild(cartItem);
+                total += item.price*item.count;
+            });
+
+            totalEl.textContent = `Jami: R$ ${total.toFixed(2)}`;
+        }
+
+        function updateTotal() {
+            let total = cart.reduce((sum, item) => sum + item.price*item.count, 0);
+            totalEl.textContent = `Jami: R$ ${total.toFixed(2)}`;
+        }
+
+        function saveCart() {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        // ==================== DEMO: FAKE CART ====================
+        // Bu odatda index.html dagi buy tugmalardan keladi
+        if(cart.length === 0){
+            cart = [
+                {
+                    img: "./images/Image (1).svg",
+                    name: "Expresso Tradicional",
+                    price: 9.90,
+                    count: 2
+                },
+                {
+                    img: "./images/Image (2).svg",
+                    name: "Expresso Americano",
+                    price: 9.90,
+                    count: 1
+                },
+                {
+                    img: "./images/Image (3).svg",
+                    name: "Expresso Cremoso",
+                    price: 9.90,
+                    count: 3
+                }
+            ];
+            saveCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

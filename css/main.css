@@ -115,11 +115,13 @@ body {
     height: 2px;
     background: var(--background-color-shop-cl);
     transition: all 0.3s ease;
+     color: #272221;
 }
 
 .nav__links:hover::after {
     width: 100%;
     left: 0;
+    color: #272221;
 }
 .main{
     padding: 100px 0;
@@ -192,11 +194,11 @@ margin-bottom: 25px;
     height: 380px;
     z-index: -2;
     left: -450px;
-    background-color: #f8e405b5;
+    background-color: #f9e31ad6;
     width: 450px;
     height: 450px;
    border-radius: 50%;
-   box-shadow:0 4px 25px rgba(228, 167, 12, 0.94);
+   box-shadow:0 4px 25px rgba(14, 13, 13, 0.236);
 }
 
 .menu__title{
