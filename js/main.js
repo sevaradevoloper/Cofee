@@ -88,7 +88,49 @@ const mockMenu = [
         name: "Flat White",
         story: "Café espresso suave com leite cremoso",
         price: 14.00
-    }
+    },
+    {
+        img: "./images/Image (10).svg",
+        quality: ["Tradicional"],
+        name: "Café Mocha",
+        story: "Café com chocolate e leite vaporizado",
+        price: 12.90
+    },
+    {
+        img: "./images/Image (11).svg",
+        quality: ["Especial", "Gelado"],
+        name: "Iced Latte",
+        story: "Leite gelado com café espresso e gelo",
+        price: 15.50
+    },
+    {
+        img: "./images/Image (12).svg",
+        quality: ["Tradicional"],
+        name: "Cappuccino",
+        story: "Café espresso com leite vaporizado e espuma",
+        price: 10.00
+    },
+    {
+        img: "./images/Image (13).svg",
+        quality: ["Especial"],
+        name: "Flat White",
+        story: "Café espresso suave com leite cremoso",
+        price: 14.00
+    },
+    {
+        img: "./images/Image (14).svg",
+        quality: ["Tradicional"],
+        name: "Café Mocha",
+        story: "Café com chocolate e leite vaporizado",
+        price: 12.90
+    },
+    {
+        img: "./images/Image (15).svg",
+        quality: ["Especial", "Gelado"],
+        name: "Iced Latte",
+        story: "Leite gelado com café espresso e gelo",
+        price: 15.50
+    },
 ];
 
 // ====================== SELECT HTML ELEMENTS ======================
@@ -131,7 +173,7 @@ function updateMenuItems() {
 }
 
 // ====================== DEMO: har 3 sekund yangilash ======================
-setInterval(updateMenuItems, 10000000);
+setInterval(updateMenuItems, 3000);
 
 // ====================== Eslatma ======================
 // Bu demo uchun 3 sekund berilgan. Loyihada siz bu vaqtni 4-5 kunga moslab o‘zgartirishingiz mumkin.
