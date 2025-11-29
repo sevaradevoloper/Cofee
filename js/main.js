@@ -30,24 +30,32 @@ hero.reveal('.hero__text',{delay : 3000})
 // =============Counter=================================================================
 
 
-let ayir = document.getElementById("ayir");
-let number = document.getElementById("number");
-let qoshish = document.getElementById("qoshish");
+const allMenuItems = document.querySelectorAll(".menu__items");
 
-let count = 0;
+allMenuItems.forEach(item => {
+    // Har bir item ichidan kerakli tugma va raqam elementlarini topamiz
+    const qoshishBtn = item.querySelector(".qoshish");
+    const ayirBtn = item.querySelector(".ayir");
+    const numberEl = item.querySelector(".number");
 
+    // Boshlang'ich qiymatni number elementidan olamiz (yoki 0 dan boshlaymiz)
+    let count = parseInt(numberEl.textContent);
 
-qoshish.addEventListener("click", ()=>{
-    count++;
-    number.textContent = count;
-})
+    // QO'SHISH funksiyasi
+    qoshishBtn.addEventListener("click", () => {
+        count++;
+        numberEl.textContent = count;
+    });
 
-ayir.addEventListener("click", ()=>{
-    if(count > 0){     
-        count--;
-        number.textContent = count;
-    }
-})
+    // AYIRISH funksiyasi
+    ayirBtn.addEventListener("click", () => {
+        if (count > 0) {
+            count--;
+            numberEl.textContent = count;
+        }
+    });
+});
+
 
 
 // ====================== MOCK DATA ======================
@@ -75,7 +83,7 @@ const mockMenu = [
         price: 10.00
     },
     {
-        img: "./images/Image (8).svg",
+        img: "./images/Image (9).svg",
         quality: ["Especial"],
         name: "Flat White",
         story: "Café espresso suave com leite cremoso",
@@ -123,7 +131,7 @@ function updateMenuItems() {
 }
 
 // ====================== DEMO: har 3 sekund yangilash ======================
-setInterval(updateMenuItems, 3000);
+setInterval(updateMenuItems, 10000000);
 
 // ====================== Eslatma ======================
 // Bu demo uchun 3 sekund berilgan. Loyihada siz bu vaqtni 4-5 kunga moslab o‘zgartirishingiz mumkin.
@@ -143,6 +151,17 @@ const buyButtons = document.querySelectorAll(".buy");
 // Har bir button uchun event qo‘shamiz
 buyButtons.forEach(button => {
     button.addEventListener("click", () => {
+        // Sahifani yangi "korzinka.html" ga yo‘naltirish
+        window.location.href = "korzinka.html";
+    });
+});
+
+// Barcha buy buttonlarni tanlaymiz
+const buy = document.getElementById("buy");
+
+// Har bir button uchun event qo‘shamiz
+buy.forEach(a => {
+    a.addEventListener("click", () => {
         // Sahifani yangi "korzinka.html" ga yo‘naltirish
         window.location.href = "korzinka.html";
     });
