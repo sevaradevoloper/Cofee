@@ -6,6 +6,7 @@
     <title>Korzinka</title>
     <link rel="stylesheet" href="./css/main.css">
     <style>
+        /* ==================== UMUMIY USLUBLAR ==================== */
         body {
             font-family: "Roboto", sans-serif;
             background-color: #FAFAFA;
@@ -88,6 +89,121 @@
         .checkout:hover {
             background-color: #341f72;
         }
+        .form-group { /* Modal ichidagi form elementlari */
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #574F4D;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #D7D5D5;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box; /* Kenglikni ichiga paddingni qo'shish */
+        }
+
+        /* ==================== MODAL OYNA USLUBLARI ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #403937;
+        }
+
+        .delivery-cost {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-weight: 700;
+            text-align: right;
+            color: #4B2995;
+        }
+        
+        /* ==================== TASDIQLASH XABARI (CHIROYLILASHTIRILGAN USLUB) ==================== */
+
+        .confirmation-message {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #f4f0ff; 
+            color: #4B2995; 
+            border: 1px solid #e0cffc;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(75, 41, 149, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .confirmation-message h3 {
+            font-size: 24px;
+            color: #403937;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .confirmation-message p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #574F4D;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-message strong {
+            color: #4B2995; 
+            font-weight: 700;
+        }
+
+        .confirmation-message hr {
+            border: none;
+            border-top: 1px dashed #D7D5D5;
+            margin: 20px 0;
+        }
+
+        .confirmation-message .icon {
+            font-size: 30px;
+            color: #00b300; 
+            margin-right: 8px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -105,8 +221,7 @@
                             <a href="./index.html" class="nav__links">Menu</a>
                         </li>
                         <li class="nav__items">
-                            <a href="#" class="nav__loctaion"><img src="./images/location.svg" alt="">Porto Alegre,
-                                RS</a>
+                            <a href="#" class="nav__loctaion"><img src="./images/location.svg" alt="">Porto Alegre, RS</a>
                             <a href="#" class="nav__order" id="buy"><img src="./images/savatcha.svg" alt=""></a>
                         </li>
                     </ul>
@@ -116,25 +231,86 @@
     </header>
     <h1>Sizning Korzinkangiz</h1>
     <div class="cart-container" id="cart-container">
-        <!-- Buy bosilgan itemlar shu yerda JS orqali paydo bo‘ladi -->
-    </div>
+        </div>
     <div class="total" id="total">Jami: R$ 0.00</div>
-    <button class="checkout">Dastafka</button>
 
+    
+    <button class="checkout" id="open-delivery-modal">Dastafka Buyurtmasi</button>
+
+    <div id="confirmation-message" class="confirmation-message" style="display: none;"></div>
+
+    <div id="delivery-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Dastafka Ma'lumotlari</h2>
+            <form id="delivery-form">
+                
+                <div class="form-group">
+                    <label for="region">Toshkentdagi Hududingiz:</label>
+                    <select id="region" name="region" required>
+                        <option value="">Hududni tanlang</option>
+                        <option value="markaz">Shahar Markazi (5,000 UZS)</option>
+                        <option value="yaqin">Markazga Yaqin Hududlar (10,000 UZS)</option>
+                        <option value="uzaq">Uzoqroq Hududlar (15,000 UZS)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">To'liq Manzil:</label>
+                    <input type="text" id="address" name="address" placeholder="Ko'cha, uy raqami, kvartira" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Telefon Raqam:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+998 XX YYY ZZ ZZ" required>
+                </div>
+
+                <div class="delivery-cost">Dastafka narxi: <span id="delivery-price">0.00 UZS</span></div>
+                <button type="submit" class="checkout confirm-button">Buyurtmani Tasdiqlash</button>
+            </form>
+        </div>
+    </div>
+    
     <script>
-        // ==================== DEMO DATA ====================
-        // Odatda localStorage orqali saqlansa bo‘ladi
+        // ==================== ELEMENTLARNI OLISH ====================
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
         const cartContainer = document.getElementById("cart-container");
         const totalEl = document.getElementById("total");
+        const openModalBtn = document.getElementById("open-delivery-modal");
+        const deliveryModal = document.getElementById("delivery-modal");
+        const closeModalBtn = deliveryModal.querySelector(".close-button");
+        const deliveryForm = document.getElementById("delivery-form");
+        const regionSelect = document.getElementById("region");
+        const deliveryPriceEl = document.getElementById("delivery-price");
+        const confirmationMessage = document.getElementById("confirmation-message");
 
-        // ==================== FUNCTION TO RENDER CART ====================
+        // ----------------- Dastafka narxlari (UZS) -----------------
+        const deliveryCosts = {
+            "markaz": 5000,
+            "yaqin": 10000,
+            "uzaq": 15000,
+            "": 0 
+        };
+
+        let currentDeliveryCost = 0;
+
+
+        // ==================== FUNKSIYALAR ====================
+        function saveCart() {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function updateTotal() {
+            let total = cart.reduce((sum, item) => sum + item.price*item.count, 0);
+            totalEl.textContent = `Jami: R$ ${total.toFixed(2)}`;
+        }
+
         function renderCart() {
             cartContainer.innerHTML = "";
             let total = 0;
 
-            cart.forEach((item, index) => {
+            cart.forEach((item) => {
                 const cartItem = document.createElement("div");
                 cartItem.classList.add("cart-item");
 
@@ -159,10 +335,16 @@
                 const priceEl = cartItem.querySelector(".price");
 
                 minusBtn.addEventListener("click", () => {
-                    if(item.count > 1) {
+                    if(item.count > 0) {
                         item.count--;
-                        countEl.textContent = item.count;
-                        priceEl.textContent = `R$ ${(item.price*item.count).toFixed(2)}`;
+                        if (item.count === 0) {
+                            // Agar 0 bo'lsa, korzinkadan o'chirish
+                            cart = cart.filter(c => c !== item);
+                            renderCart();
+                        } else {
+                            countEl.textContent = item.count;
+                            priceEl.textContent = `R$ ${(item.price*item.count).toFixed(2)}`;
+                        }
                         updateTotal();
                         saveCart();
                     }
@@ -181,39 +363,101 @@
             });
 
             totalEl.textContent = `Jami: R$ ${total.toFixed(2)}`;
+            
+            // Korzinka bo'sh bo'lsa, tugmani yashirish
+            openModalBtn.style.display = cart.length > 0 ? 'block' : 'none';
+        }
+        
+        function updateDeliveryPrice() {
+            const selectedRegion = regionSelect.value;
+            currentDeliveryCost = deliveryCosts[selectedRegion] || 0;
+            
+            // Narxni UZS formatida ko'rsatish
+            deliveryPriceEl.textContent = `${currentDeliveryCost.toLocaleString()} UZS`;
         }
 
-        function updateTotal() {
-            let total = cart.reduce((sum, item) => sum + item.price*item.count, 0);
-            totalEl.textContent = `Jami: R$ ${total.toFixed(2)}`;
-        }
+        // ==================== EVENT LISTENERLAR ====================
 
-        function saveCart() {
-            localStorage.setItem("cart", JSON.stringify(cart));
-        }
+        // 1. Modalni Ochish
+        openModalBtn.addEventListener("click", () => {
+             if (cart.length === 0) {
+                alert("Iltimos, avval korzinkaga mahsulot qo'shing.");
+                return;
+            }
+            deliveryModal.style.display = "flex";
+            updateDeliveryPrice();
+        });
 
-        // ==================== DEMO: FAKE CART ====================
-        // Bu odatda index.html dagi buy tugmalardan keladi
+        // 2. Modalni Yopish
+        closeModalBtn.addEventListener("click", () => {
+            deliveryModal.style.display = "none";
+        });
+
+        deliveryModal.addEventListener("click", (e) => {
+            if (e.target === deliveryModal) {
+                deliveryModal.style.display = "none";
+            }
+        });
+
+        // 3. Hududga qarab narxni yangilash
+        regionSelect.addEventListener("change", updateDeliveryPrice);
+
+        // 4. Formani Yuborish (Buyurtmani Tasdiqlash)
+        deliveryForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            if (currentDeliveryCost === 0) {
+                 alert("Iltimos, dastafka hududini tanlang.");
+                 return;
+            }
+
+            const address = document.getElementById("address").value;
+            const phone = document.getElementById("phone").value;
+            const regionName = regionSelect.options[regionSelect.selectedIndex].text.split('(')[0].trim();
+            
+            const baseTotalInReais = cart.reduce((sum, item) => sum + item.price * item.count, 0);
+            
+            const finalTotalUZS = `${currentDeliveryCost.toLocaleString()} UZS`;
+            const finalTotalReais = `R$ ${baseTotalInReais.toFixed(2)}`;
+
+            
+            // Buyurtma tasdiqlash xabarini CHIROYLILASHTIRIB ko'rsatish
+            confirmationMessage.innerHTML = `
+                <h3><span class="icon">✅</span> Buyurtmangiz Muvaffaqiyatli Qabul Qilindi!</h3>
+                <p>Buyurtma ${regionName} hududiga rasmiylashtirildi.</p>
+                
+                <hr>
+
+                <p>Kofe narxi: <strong>${finalTotalReais}</strong></p>
+                <p>Dastafka narxi: <strong>${finalTotalUZS}</strong></p>
+                
+                <hr>
+
+                <p>Operatorimiz tez orada <strong>${phone}</strong> raqami orqali bog'lanadi.</p>
+                
+                <a href="index.html" class="checkout" style="text-decoration: none; margin-top: 25px;">Bosh Sahifaga Qaytish</a>
+            `;
+            
+            // Sahifani tozalash va xabarni ko'rsatish
+            deliveryModal.style.display = 'none';
+            cartContainer.innerHTML = '<p style="text-align:center; color:#574F4D; padding: 20px;">Korzinka bo‘shatildi. Buyurtma rasmiylashtirildi!</p>';
+            totalEl.style.display = 'none';
+            openModalBtn.style.display = 'none';
+            confirmationMessage.style.display = 'block';
+            
+            // Local Storage'ni va massivni tozalash
+            localStorage.removeItem("cart");
+            cart = []; 
+        });
+
+        // ==================== INITSALIZATSIYA (BIRINCHI YUKLASH) ====================
+        
+        // Demo cart bo'sh bo'lsa, to'ldirish
         if(cart.length === 0){
             cart = [
-                {
-                    img: "./images/Image (1).svg",
-                    name: "Expresso Tradicional",
-                    price: 9.90,
-                    count: 2
-                },
-                {
-                    img: "./images/Image (2).svg",
-                    name: "Expresso Americano",
-                    price: 9.90,
-                    count: 1
-                },
-                {
-                    img: "./images/Image (3).svg",
-                    name: "Expresso Cremoso",
-                    price: 9.90,
-                    count: 3
-                }
+                { img: "./images/Image (1).svg", name: "Expresso Tradicional", price: 9.90, count: 2 },
+                { img: "./images/Image (2).svg", name: "Expresso Americano", price: 9.90, count: 1 },
+                { img: "./images/Image (3).svg", name: "Expresso Cremoso", price: 9.90, count: 3 }
             ];
             saveCart();
         }
